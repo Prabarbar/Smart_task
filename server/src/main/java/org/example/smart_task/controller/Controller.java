@@ -1,30 +1,76 @@
 package org.example.smart_task.controller;
 
 import org.example.smart_task.good.model.Good;
-import org.example.smart_task.good.payload.GoodRequest;
+import org.example.smart_task.good.payload.AddGoodForm;
 import org.example.smart_task.good.service.GoodServiceImpl;
+import org.example.smart_task.requests.model.Request;
+import org.example.smart_task.requests.payload.AddRequestForm;
+import org.example.smart_task.requests.service.RequestServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class Controller {
     private final GoodServiceImpl goodServiceImpl;
+    private final RequestServiceImpl requestServiceImpl;
     @Autowired
-    public Controller(GoodServiceImpl goodServiceImpl){
+    public Controller(GoodServiceImpl goodServiceImpl, RequestServiceImpl requestServiceImpl){
         this.goodServiceImpl = goodServiceImpl;
+        this.requestServiceImpl = requestServiceImpl;
+    }
+
+    @GetMapping("/good/get-goods")
+    public List<Good> getGoods(){
+        return goodServiceImpl.getGoods();
     }
 
     @PostMapping("/good/add-good")
-    public void addGood(@RequestBody GoodRequest request){
-        goodServiceImpl.insertGood(new Good(
-                request.itemGroup(),
-                request.unitOfMeasurement(),
-                request.priceWithoutVat(),
-                request.status(),
-                request.storageLocation(),
-                request.contactPerson(),
-                request.photo()));
+    public void addGood(@RequestBody AddGoodForm form){
+        goodServiceImpl.addGood(new Good(
+                form.itemGroup(),
+                form.unitOfMeasurement(),
+                form.quantity(),
+                form.priceWithoutVat(),
+                form.status(),
+                form.storageLocation(),
+                form.contactPerson()));
+    }
+
+    @DeleteMapping("good/delete-good")
+    public void deleteGood(@RequestParam int id){
+        goodServiceImpl.deleteGood(id);
+    }
+    @PatchMapping("good/update-good")
+    public void updateGood(@RequestParam int id, @RequestBody Good updatedGood ){
+        goodServiceImpl.updateGoodById(id, updatedGood);
+    }
+
+    @GetMapping("good/get-good")
+    public Good getGoodById(@RequestParam int id){
+        return goodServiceImpl.getGoodById(id);
+    }
+
+    @GetMapping("request/get-requests")
+    public List<Request> getRequests(){
+        return requestServiceImpl.getRequests();
+    }
+
+    @PostMapping("request/add-request")
+    public void addRequest(@RequestBody AddRequestForm form){
+        requestServiceImpl.addRequest(new Request(
+                form.employeeName(),
+                form.itemId(),
+                form.unitOfMeasurement(),
+                form.quantity(),
+                form.priceWithoutVat(),
+                form.comment()));
+    }
+
+    @DeleteMapping("request/delete-request")
+    public void deleteRequest(@RequestParam int id){
+        requestServiceImpl.deleteRequest(id);
     }
 }

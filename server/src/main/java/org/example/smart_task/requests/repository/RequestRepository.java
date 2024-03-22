@@ -1,12 +1,12 @@
-package org.example.smart_task.good.repository;
+package org.example.smart_task.requests.repository;
 
-import org.example.smart_task.good.model.Good;
+import org.example.smart_task.requests.model.Request;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GoodRepository extends JpaRepository<Good, Integer> {
+public interface RequestRepository extends JpaRepository<Request, Integer>{
     /**
      Dear Hiring Manager,
-     Here I use default Java Persistence API methods. I would like to list them and give You an SQL equivalent:
+     Here I use default Java Persistence API methods. I would like to list them and give you an SQL equivalent:
 
      findAll()
      SQL Equivalent: SELECT * FROM table_name;

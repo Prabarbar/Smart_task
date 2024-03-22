@@ -15,20 +15,20 @@ public class Good {
     private int itemId;
     private String itemGroup;
     private String unitOfMeasurement;
+    private int quantity;
     private int priceWithoutVat;
     private String status;
     private String storageLocation;
     private String contactPerson;
-    private String photo;
 
-    public Good(String itemGroup, String unitOfMeasurement, int priceWithoutVat,
-                String status, String storageLocation, String contactPerson, String photo) {
+    public Good(String itemGroup, String unitOfMeasurement, int quantity, int priceWithoutVat,
+                String status, String storageLocation, String contactPerson) {
         this.itemGroup = itemGroup;
         this.unitOfMeasurement = unitOfMeasurement;
+        this.quantity = quantity;
         this.priceWithoutVat = priceWithoutVat;
         this.status = status;
         this.storageLocation = storageLocation;
         this.contactPerson = contactPerson;
-        this.photo = photo;
     }
 }

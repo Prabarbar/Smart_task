@@ -1,12 +1,12 @@
 package org.example.smart_task.good.payload;
 
-public record GoodRequest(
+public record AddGoodForm(
         String itemGroup,
         String unitOfMeasurement,
+        int quantity,
         int priceWithoutVat,
         String status,
         String storageLocation,
-        String contactPerson,
-        String photo
+        String contactPerson
 ) {
 }
