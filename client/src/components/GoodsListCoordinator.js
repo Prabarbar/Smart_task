@@ -4,13 +4,13 @@ export default function GoodsListCoordinator({itemId, itemGroup, unitOfMeasureme
 
   const [editFlag, setEditFlag] = useState(false)
 
-  const [newItemGroup, setNewItemGroup] = useState('')
-  const [newUnitOfMeasurement, setNewUnitOfMeasurement] = useState('')
-  const [newQuantity, setNewQuantity] = useState('')
-  const [newPriceWithoutVat, setNewPriceWithoutVat] = useState('')
-  const [newStatus, setNewStatus] = useState('')
-  const [newStorageLocation, setNewStorageLocation] = useState('')
-  const [newContactPerson, setNewContactPerson] = useState('')
+  const [newItemGroup, setNewItemGroup] = useState(itemGroup)
+  const [newUnitOfMeasurement, setNewUnitOfMeasurement] = useState(unitOfMeasurement)
+  const [newQuantity, setNewQuantity] = useState(quantity)
+  const [newPriceWithoutVat, setNewPriceWithoutVat] = useState(priceWithoutVat)
+  const [newStatus, setNewStatus] = useState(status)
+  const [newStorageLocation, setNewStorageLocation] = useState(storageLocation)
+  const [newContactPerson, setNewContactPerson] = useState(contactPerson)
 
   async function handleRemove(id){
     try{
@@ -45,6 +45,7 @@ export default function GoodsListCoordinator({itemId, itemGroup, unitOfMeasureme
     showGoods()
 }
 
+
   return(
     !editFlag ?(
     <>
@@ -68,19 +69,31 @@ export default function GoodsListCoordinator({itemId, itemGroup, unitOfMeasureme
     <>
       <tr>
         <td>{itemId}</td>
-        <td>{itemGroup} <input type='text' onChange={e => setNewItemGroup(e.target.value)}></input></td>
-        <td>{unitOfMeasurement}<input type='text' onChange={e => setNewUnitOfMeasurement(e.target.value)} onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  handleEdit(itemId)
-                }
-              }}></input></td>
-        <td>{quantity} <input type='text' onChange={e => setNewQuantity(e.target.value)} onKeyDown={e => {
+        <td>
+          {itemGroup} 
+          <select onChange={(e)=>setNewItemGroup(e.target.value)}>
+            <option value={''}>Select option</option>
+            <option value={'food'}>Food</option>
+            <option value={'tools'}>Tools</option>
+            <option value={'furniture'}>Furniture</option>
+          </select>
+        </td>
+        <td>
+          {unitOfMeasurement}
+          <select onChange={(e)=>setNewUnitOfMeasurement(e.target.value)}>
+            <option value={''}>Select option</option>
+            <option value={'grams'}>Grams</option>
+            <option value={'kilograms'}>Kilograms</option>
+            <option value={'pieces'}>Pieces</option>
+          </select>
+        </td>
+        <td>{quantity} <input type='number' onChange={e => setNewQuantity(e.target.value)} onKeyDown={e => {
                 if (e.key === 'Enter') {
                   handleEdit(itemId)
                 }
               }}
         ></input></td>
-        <td>{priceWithoutVat} <input type='text' onChange={e => setNewPriceWithoutVat(e.target.value)} onKeyDown={e => {
+        <td>{priceWithoutVat} <input type='number' onChange={e => setNewPriceWithoutVat(e.target.value)} onKeyDown={e => {
                 if (e.key === 'Enter') {
                   handleEdit(itemId)
                 }
@@ -96,11 +109,11 @@ export default function GoodsListCoordinator({itemId, itemGroup, unitOfMeasureme
                   handleEdit(itemId)
                 }
               }}></input></td>
-        <td>{contactPerson} <input type='text' onChange={e => setNewContactPerson(e.target.value)} onKeyDown={e => {
+        <td>{contactPerson} <textarea maxLength={50} placeholder='Maximum 50 characters' onChange={e => setNewContactPerson(e.target.value)} onKeyDown={e => {
                 if (e.key === 'Enter') {
                   handleEdit(itemId)
                 }
-              }}></input></td>
+              }}></textarea></td>
         <td>
           <button onClick={()=>setEditFlag(false)}>Edit</button>
           <button onClick={()=>handleEdit(itemId)}>Submit changes</button>

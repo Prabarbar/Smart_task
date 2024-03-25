@@ -15,5 +15,6 @@ public interface GoodService {
     void updateGoodById(int id, Good updatedGood);
 
     Good getGoodById(int id);
+    List<Good> getGoodsByItemGroupAndUnitOfMeasure(String itemGroup, String unitOfMeasurement);
 
 }

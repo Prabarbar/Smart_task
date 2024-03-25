@@ -58,6 +58,11 @@ public class Controller {
         return requestServiceImpl.getRequests();
     }
 
+    @GetMapping("request/get-request")
+    public Request getRequestById(@RequestParam int id){
+        return requestServiceImpl.getRequestById(id);
+    }
+
     @PostMapping("request/add-request")
     public void addRequest(@RequestBody AddRequestForm form){
         requestServiceImpl.addRequest(new Request(
@@ -66,11 +71,27 @@ public class Controller {
                 form.unitOfMeasurement(),
                 form.quantity(),
                 form.priceWithoutVat(),
-                form.comment()));
+                form.comment(),
+                form.status()));
     }
 
     @DeleteMapping("request/delete-request")
     public void deleteRequest(@RequestParam int id){
         requestServiceImpl.deleteRequest(id);
+    }
+
+    @PatchMapping("request/update-request")
+    public void updateRequest(@RequestParam int id, @RequestBody Request updatedRequest){
+        requestServiceImpl.updateRequestById(id, updatedRequest);
+    }
+
+    @GetMapping("good/get-good-by")
+    public List<Good> getGoodByParams(@RequestParam String itemGroup, String unitOfMeasurement){
+        return goodServiceImpl.getGoodsByItemGroupAndUnitOfMeasure(itemGroup, unitOfMeasurement);
+    }
+
+    @GetMapping("request/get-request-by")
+    public List<Request> getRequestByParams(@RequestParam String employeeName, String unitOfMeasurement){
+        return requestServiceImpl.getRequestByEmployeeNameAndUnitOfMeasure(employeeName, unitOfMeasurement);
     }
 }

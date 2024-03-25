@@ -6,6 +6,7 @@ public record AddRequestForm(
         String unitOfMeasurement,
         int quantity,
         int priceWithoutVat,
-        String comment
+        String comment,
+        String status
 ) {
 }

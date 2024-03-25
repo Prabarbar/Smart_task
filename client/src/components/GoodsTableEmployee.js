@@ -6,6 +6,13 @@ import GoodsListEmployee from './GoodsListEmployee.js'
 export default function GoodsTableEmployee(){
   const [goods, setGoods] = useState([])
   const [counter, setCounter] = useState(0)
+  const [filteredGoods, setFilteredGoods] = useState([])
+  const [filterFlag, setFilterFlag]= useState(false)
+
+  const [itemGroup, setItemGroup] = useState('')
+  const [unitOfMeasurement, setUnitOfMeasurement] = useState('')
+
+  const [goodId, setGoodId] = useState('')
 
   const navigate = useNavigate();
 
@@ -18,6 +25,7 @@ export default function GoodsTableEmployee(){
         const getRes = await fetch('http://localhost:8080/good/get-goods');
         const goods = await getRes.json()
         setGoods(goods)
+        setFilteredGoods(goods)
       }
     catch(err){
       console.error(err)
@@ -26,38 +34,93 @@ export default function GoodsTableEmployee(){
 
 
   function handleSort(element){
-    if(counter % 2 === 0){
-      goods.sort((a, b)=>{
-        if(a[element] < b[element]){
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      })
-      const ascendingGoods = Object.assign([],goods);
-      setGoods(ascendingGoods)
-      setCounter(counter+1)
+    if(filterFlag === false){
+      if(counter % 2 === 0){
+        goods.sort((a, b)=>(a[element] < b[element] ? -1 : 1))
+      }
+      else{
+        goods.sort((a, b)=>(a[element] > b[element] ? -1 : 1))
+      }
+      const sortedGoods = [...goods]
+      setGoods(sortedGoods)
+      setCounter(counter +1)
     }
     else{
-      goods.sort((a, b)=>{
-        if(a[element] > b[element]){
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      })
-      const descendingGoods= Object.assign([], goods);
-      setGoods(descendingGoods);
+      if(counter % 2 === 0){
+        filteredGoods.sort((a, b)=>(a[element] < b[element] ? -1 : 1))
+      }
+      else{
+        filteredGoods.sort((a, b)=>(a[element] > b[element] ? -1 : 1))
+      }
+      const sortedGoods = [...filteredGoods]
+      setFilteredGoods(sortedGoods)
       setCounter(counter +1)
     }
   }
 
+  async function handleFilter(){
+    try{
+        const getRes = await fetch(`http://localhost:8080/good/get-good-by?itemGroup=${itemGroup}&unitOfMeasurement=${unitOfMeasurement}`);
+        const goods = await getRes.json()
+        setFilteredGoods(goods)
+      }
+    catch(err){
+      console.error(err)
+    }
+    setFilterFlag(true)
+    if(itemGroup === '' && unitOfMeasurement === ''){
+      setFilterFlag(false)
+    }
+  }
   
+  async function handleFind(){
+    try{
+      const getRes = await fetch(`http://localhost:8080/good/get-good?id=${goodId}`);
+      const good = await getRes.json()
+      setGoods([good])
+    }
+  catch(err){
+    console.error(err)
+  }
+  }
+
   return(    
     <>
       <button onClick={()=>navigate("/")}>Back</button>
+      <p>-----------------------------------------------------------</p>
+      <label>Filter Item Group:
+        <select onChange={e=>setItemGroup(e.target.value)}>
+          <option value=''>No filter</option>
+          <option value='food'>food</option>
+          <option value='tools'>tools</option>
+          <option value='furniture'>furniture</option>
+        </select>
+      </label>
+      <br></br>
+      <label>Filter Unit of Measurement:
+        <select onChange={e=>setUnitOfMeasurement(e.target.value)}>
+          <option value=''>No filter</option>
+          <option value='pieces'>pieces</option>
+          <option value='grams'>grams</option>
+          <option value='kilograms'>kilograms</option>
+        </select>
+      </label>
+      <br></br>
+      <button onClick={handleFilter}>Apply filters</button>
+      <button onClick={()=>setFilterFlag(false)}>Clear filters</button>
+      <br></br>
+      <p>-----------------------------------------------------------</p>
+      <label>
+        Find good by Id:
+        <input onChange={(e)=>setGoodId(e.target.value)} onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  handleFind()
+                }
+              }}>
+        </input>
+        <br></br>
+        <button onClick={()=>showGoods()}>Clear</button>
+      </label>
       <div>
         <h2 style={{textAlign:'center'}}>Goods Table</h2>
         <table id='goods-table-employee' className='goods'>
@@ -91,10 +154,21 @@ export default function GoodsTableEmployee(){
             </tr>
           </thead>
           <tbody>
-            {goods.map(good =>{
-            return <GoodsListEmployee key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity} priceWithoutVat={good.priceWithoutVat}
-             status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
-            })}
+            {
+            filterFlag ?(
+              filteredGoods.map(good =>{
+              return <GoodsListEmployee key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity} priceWithoutVat={good.priceWithoutVat}
+              status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
+              })
+            )
+            :
+            (
+              goods.map(good =>{
+                return <GoodsListEmployee key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity} priceWithoutVat={good.priceWithoutVat}
+                  status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
+                })
+            )
+            }
           </tbody>
         </table>
       </div>

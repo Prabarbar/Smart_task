@@ -2,8 +2,15 @@ package org.example.smart_task.requests.repository;
 
 import org.example.smart_task.requests.model.Request;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Integer>{
+    @Query("SELECT u FROM Request u WHERE (:employeeName = '' OR u.employeeName = :employeeName)" +
+            "AND (:unitOfMeasurement = '' OR u.unitOfMeasurement = :unitOfMeasurement)")
+    List<Request> findRequestByEmployeeNameAndUnitOfMeasurement(String employeeName, String unitOfMeasurement);
+
     /**
      Dear Hiring Manager,
      Here I use default Java Persistence API methods. I would like to list them and give you an SQL equivalent:

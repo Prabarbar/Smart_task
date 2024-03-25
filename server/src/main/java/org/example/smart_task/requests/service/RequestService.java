@@ -9,6 +9,9 @@ public interface RequestService {
     void addRequest(Request request);
 
     List<Request> getRequests();
+    Request getRequestById(int id);
 
     void deleteRequest(int id);
+    void updateRequestById(int id, Request updatedRequest);
+    List<Request> getRequestByEmployeeNameAndUnitOfMeasure(String employeeName, String unitOfMeasurement);
 }

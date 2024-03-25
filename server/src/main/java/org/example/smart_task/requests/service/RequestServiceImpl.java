@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RequestServiceImpl implements RequestService{
@@ -25,7 +26,34 @@ public class RequestServiceImpl implements RequestService{
     }
 
     @Override
+    public Request getRequestById(int id) {
+        Optional<Request> optionalRequest = requestRepository.findById(id);
+        return optionalRequest.orElse(null);
+    }
+
+    @Override
+    public void updateRequestById(int id, Request updatedRequest) {
+        Optional<Request> requestOptional = requestRepository.findById(id);
+        if(requestOptional.isPresent()){
+            Request existingRequest = requestOptional.get();
+            existingRequest.setEmployeeName(updatedRequest.getEmployeeName());
+            existingRequest.setItemId(updatedRequest.getItemId());
+            existingRequest.setUnitOfMeasurement(updatedRequest.getUnitOfMeasurement());
+            existingRequest.setQuantity(updatedRequest.getQuantity());
+            existingRequest.setPriceWithoutVat(updatedRequest.getPriceWithoutVat());
+            existingRequest.setComment(updatedRequest.getComment());
+            existingRequest.setStatus(updatedRequest.getStatus());
+            requestRepository.save(existingRequest);
+        }
+    }
+
+    @Override
     public void deleteRequest(int id) {
         requestRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Request> getRequestByEmployeeNameAndUnitOfMeasure(String employeeName, String unitOfMeasurement) {
+        return requestRepository.findRequestByEmployeeNameAndUnitOfMeasurement(employeeName, unitOfMeasurement);
     }
 }

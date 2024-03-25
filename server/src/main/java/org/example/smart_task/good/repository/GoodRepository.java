@@ -2,8 +2,15 @@ package org.example.smart_task.good.repository;
 
 import org.example.smart_task.good.model.Good;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface GoodRepository extends JpaRepository<Good, Integer> {
+
+    @Query("SELECT u FROM Good u WHERE (:itemGroup = '' OR u.itemGroup = :itemGroup)" +
+            "AND (:unitOfMeasurement = '' OR u.unitOfMeasurement = :unitOfMeasurement)")
+    List<Good> findGoodByItemGroupAndUnitOfMeasurement(String itemGroup, String unitOfMeasurement);
     /**
      Dear Hiring Manager,
      Here I use default Java Persistence API methods. I would like to list them and give You an SQL equivalent:

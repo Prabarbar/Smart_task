@@ -43,28 +43,26 @@ export default function AddGood(){
                             <option value='tools'>tools</option>
                             <option value='furniture'>furniture</option>
                         </select>
-                        {/* <input type='text' onChange={e => setItemGroup(e.target.value)}></input> */}
                     </label>
                     <br></br>
                     <label>Unit of Measurement: 
-                    <select onChange={e=>setUnitOfMeasurement(e.target.value)}>
+                        <select onChange={e=>setUnitOfMeasurement(e.target.value)}>
                             <option value='pieces'>pieces</option>
                             <option value='grams'>grams</option>
                             <option value='kilograms'>kilograms</option>
                         </select>
-                        {/* <input type='text' onChange={e => setUnitOfMeasurement(e.target.value)}></input> */}
                     </label>
                     <br></br>
                     <label>Quantity: 
-                        <input type='text' onChange={e => setQuantity(e.target.value)}></input>
+                        <input required type='number' onChange={e => setQuantity(e.target.value)}></input>
                     </label>
                     <br></br>
                     <label>Price without Vat: 
-                        <input type='text' onChange={e => setPriceWithoutVat(e.target.value)}></input>
+                        <input required type='number' onChange={e => setPriceWithoutVat(e.target.value)}></input>
                     </label>
                     <br></br>
                     <label>Status: 
-                        <input type='text' onChange={e => setStatus(e.target.value)}></input>
+                        <input required type='text' onChange={e => setStatus(e.target.value)}></input>
                     </label>
                     <br></br>
                     <label>Storage location: 
@@ -72,7 +70,7 @@ export default function AddGood(){
                     </label>
                     <br></br>
                     <label>Contact person: 
-                        <input type='text' onChange={e => setContactPerson(e.target.value)}></input>
+                        <textarea maxLength={50} placeholder='Maximum 50 characters' onChange={e => setContactPerson(e.target.value)}></textarea>
                     </label>
                     <br></br>
                     <button type='submit'>Submit</button>
@@ -80,5 +78,4 @@ export default function AddGood(){
             </div>
         </>
     )
-
 }

@@ -22,7 +22,7 @@ public class Request {
     private int quantity;
     private int priceWithoutVat;
     private String comment;
-//    private String status;
+    private String status;
 
     // I create many-to-many relation with goods list, to further update the app with *** task.
     @ManyToMany(fetch = FetchType.EAGER)
@@ -30,14 +30,14 @@ public class Request {
     private List<Good> goods = new ArrayList<>();
 
     public Request(String employeeName, int itemId, String unitOfMeasurement,
-                   int quantity, int priceWithoutVat, String comment){
+                   int quantity, int priceWithoutVat, String comment, String status){
         this.employeeName = employeeName;
         this.itemId = itemId;
         this.unitOfMeasurement = unitOfMeasurement;
         this.quantity = quantity;
         this.priceWithoutVat = priceWithoutVat;
         this.comment = comment;
-//        this.status = status;
+        this.status = status;
     }
 
 }
