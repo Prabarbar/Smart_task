@@ -7,6 +7,9 @@ import org.example.smart_task.requests.model.Request;
 import org.example.smart_task.requests.payload.AddRequestForm;
 import org.example.smart_task.requests.service.RequestServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +39,8 @@ public class Controller {
                 form.priceWithoutVat(),
                 form.status(),
                 form.storageLocation(),
-                form.contactPerson()));
+                form.contactPerson(),
+                form.requestedQuantity()));
     }
 
     @DeleteMapping("good/delete-good")
@@ -58,21 +62,19 @@ public class Controller {
         return requestServiceImpl.getRequests();
     }
 
+//    @PreAuthorize("hasRole('coordinator')")
     @GetMapping("request/get-request")
     public Request getRequestById(@RequestParam int id){
         return requestServiceImpl.getRequestById(id);
     }
 
     @PostMapping("request/add-request")
-    public void addRequest(@RequestBody AddRequestForm form){
+    public ResponseEntity<Request> addRequest(@RequestBody AddRequestForm form){
         requestServiceImpl.addRequest(new Request(
                 form.employeeName(),
-                form.itemId(),
-                form.unitOfMeasurement(),
-                form.quantity(),
-                form.priceWithoutVat(),
                 form.comment(),
                 form.status()));
+        return requestServiceImpl.getLastRequest();
     }
 
     @DeleteMapping("request/delete-request")
@@ -91,7 +93,22 @@ public class Controller {
     }
 
     @GetMapping("request/get-request-by")
-    public List<Request> getRequestByParams(@RequestParam String employeeName, String unitOfMeasurement){
-        return requestServiceImpl.getRequestByEmployeeNameAndUnitOfMeasure(employeeName, unitOfMeasurement);
+    public List<Request> getRequestByParams(@RequestParam String employeeName){
+        return requestServiceImpl.getRequestByEmployeeName(employeeName);
+    }
+
+    @PutMapping("/request/add-good-to-request")
+    public void addGoodToRequest(@RequestParam int requestId, @RequestParam int goodId, @RequestParam int requestedQuantity){
+        requestServiceImpl.addGoodToRequest(requestId, goodId, requestedQuantity);
+    }
+
+    @GetMapping("/request/get-last-request")
+    public ResponseEntity<Request> getLastRequest(){
+        return requestServiceImpl.getLastRequest();
+    }
+
+    @GetMapping("/request/get-requested-goods")
+    public List<Good> getRequestedGoods(@RequestParam int requestId){
+        return requestServiceImpl.getRequestById(requestId).getGoods();
     }
 }

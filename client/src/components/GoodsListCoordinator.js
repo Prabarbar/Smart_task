@@ -14,12 +14,10 @@ export default function GoodsListCoordinator({itemId, itemGroup, unitOfMeasureme
 
   async function handleRemove(id){
     try{
-      const delRes = await fetch(`http://localhost:8080/good/delete-good?id=${id}`, {
+      await fetch(`http://localhost:8080/good/delete-good?id=${id}`, {
         method: 'DELETE',
         headers: {'Content-Type': 'application/json'}
         })
-      const good = await delRes.json()
-      console.log(good)
     }
     catch(err){
       console.error(err)
@@ -29,14 +27,12 @@ export default function GoodsListCoordinator({itemId, itemGroup, unitOfMeasureme
 
   async function handleEdit(id){
     try{
-        const patchRes = await fetch(`http://localhost:8080/good/update-good?id=${id}`, {
+        await fetch(`http://localhost:8080/good/update-good?id=${id}`, {
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({itemGroup:newItemGroup, unitOfMeasurement:newUnitOfMeasurement, quantity:newQuantity, priceWithoutVat:newPriceWithoutVat,
                                   status:newStatus, storageLocation:newStorageLocation, contactPerson:newContactPerson})
         })
-        const good = await patchRes.json()
-        console.log(good)
     }
     catch(err){
         console.error( err)

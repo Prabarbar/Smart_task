@@ -15,26 +15,24 @@ export default function AddGood(){
     async function handleSubmit(e){
         e.preventDefault()
         try{
-          const postRes = await fetch('http://localhost:8080/good/add-good',{
+          await fetch('http://localhost:8080/good/add-good',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({itemGroup:itemGroup, unitOfMeasurement:unitOfMeasurement, quantity:quantity, priceWithoutVat:priceWithoutVat,
                                  status:status, storageLocation:storageLocation, contactPerson:contactPerson})
           })
-          const good = await postRes.json()
-          console.log(good)
         }
         catch(err){
           console.error(err)
         }
-        navigate("/coordinator-page/goods-table-coordinator")
+        navigate("/goods-table-coordinator")
       }
 
 
     return(
         <>
-            <button onClick={()=>navigate("/coordinator-page/goods-table-coordinator")}>Back</button>
-            <button onClick={()=>navigate("/")}>Home</button>
+            <button onClick={()=>navigate("/goods-table-coordinator")}>Back</button>
+            <button onClick={()=>navigate("/menu")}>Home</button>
             <div style={{textAlign:'left'}}>
                 <form onSubmit ={handleSubmit}>
                     <label>Item Group: 

@@ -7,7 +7,7 @@ export default function OrderForm(){
 const location = useLocation()
 
 const [employeeName, setEmployeeName] = useState('')
-const [quantity, setQuantity] = useState(location.state.quantity)
+const [requestedQuantity, setRequestedQuantity] = useState(location.state.quantity)
 const [comment, setComment] = useState('')
 const [info, setInfo] = useState(null)
    
@@ -15,22 +15,19 @@ const [info, setInfo] = useState(null)
 const navigate = useNavigate()
 
 
+
 async function handleSubmit(e){
     e.preventDefault()
     try{
-      const postRes = await fetch('http://localhost:8080/request/add-request',{
-        method: 'POST',
+      await fetch(`http://localhost:8080/request/add-good-to-request?requestId=${location.state.request}&goodId=${location.state.itemId}&requestedQuantity=${requestedQuantity}`,{
+        method: 'PUT',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({employeeName:employeeName, itemId:location.state.itemId, unitOfMeasurement:location.state.unitOfMeasurement, quantity:quantity,
-                            priceWithoutVat:location.state.priceWithoutVat, comment:comment, status:'New'})
       })
-      const good = await postRes.json()
-      console.log(good)
     }
     catch(err){
       console.error(err)
     }
-    setInfo("Request created")
+    setInfo("Request updated")
     setTimeout(() => {
         navigate("/goods-table-employee")
       }, "1000");
@@ -43,26 +40,26 @@ async function handleSubmit(e){
             <div style={{textAlign:'left'}}>
                 <form onSubmit ={handleSubmit}>
                     <label>Employee Name: 
-                        <input required type='text' onChange={e => setEmployeeName(e.target.value)}></input>
+                        <input required type='text' readOnly value={location.state.user} onChange={e => setEmployeeName(e.target.value)}></input>
                     </label>
                     <br></br>
                     <label>Unit of Measurement: 
-                        <input required type='text' value= {location.state.unitOfMeasurement}></input>
+                        <input required type='text' readOnly value= {location.state.unitOfMeasurement}></input>
                     </label>
                     <br></br>
                     <label>Quantity: 
-                        <input required type='number' defaultValue= {location.state.quantity} onChange={e => setQuantity(e.target.value)}></input>
+                        <input required type='number' defaultValue= {location.state.quantity} onChange={e => setRequestedQuantity(e.target.value)}></input>
                     </label>
                     <br></br>
                     <label>Price without VAT: 
-                        <input required type='number' value= {location.state.priceWithoutVat}></input>
+                        <input required type='number' readOnly value= {location.state.priceWithoutVat}></input>
                     </label>
                     <br></br>
                     <label>Comment: 
                         <textarea maxLength='100' placeholder='Maximum 100 characters' onChange={e => setComment(e.target.value)}></textarea>
                     </label>
                     <br></br>
-                    <button type='submit'>Submit</button>
+                    <button type='submit'>Add to Request</button>
                     <button onClick={()=>navigate('/goods-table-employee')}>Cancel</button>
                     {info && <h2 style={{color: 'green'}}>{info}</h2>}
                 </form>

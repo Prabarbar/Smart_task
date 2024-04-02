@@ -16,13 +16,14 @@ public class Good {
     private String itemGroup;
     private String unitOfMeasurement;
     private int quantity;
+    private int requestedQuantity;
     private int priceWithoutVat;
     private String status;
     private String storageLocation;
     private String contactPerson;
 
     public Good(String itemGroup, String unitOfMeasurement, int quantity, int priceWithoutVat,
-                String status, String storageLocation, String contactPerson) {
+                String status, String storageLocation, String contactPerson, int requestedQuantity) {
         this.itemGroup = itemGroup;
         this.unitOfMeasurement = unitOfMeasurement;
         this.quantity = quantity;
@@ -30,5 +31,6 @@ public class Good {
         this.status = status;
         this.storageLocation = storageLocation;
         this.contactPerson = contactPerson;
+        this.requestedQuantity = requestedQuantity;
     }
 }

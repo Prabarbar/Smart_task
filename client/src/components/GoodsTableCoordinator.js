@@ -86,8 +86,8 @@ export default function GoodsTableCoordinator(){
   
   return(    
     <>
-      <button onClick={()=>navigate("/coordinator-page")}>Back</button>
-      <button onClick={()=>navigate("/")}>Home</button>
+      <button onClick={()=>navigate("/menu")}>Back</button>
+      <button onClick={()=>navigate("/menu")}>Home</button>
       <br></br>
       <button onClick={()=>navigate("/coordinator-page/add-good")}>Add Good</button>
       <br></br>

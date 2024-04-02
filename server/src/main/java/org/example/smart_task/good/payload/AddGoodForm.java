@@ -7,6 +7,7 @@ public record AddGoodForm(
         int priceWithoutVat,
         String status,
         String storageLocation,
-        String contactPerson
+        String contactPerson,
+        int requestedQuantity
 ) {
 }

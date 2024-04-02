@@ -1,30 +1,47 @@
 import './App.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AddGood from './components/AddGood.js'
 import GoodsTableCoordinator from './components/GoodsTableCoordinator.js'
 import Home from './components/Home.js'
 import GoodsTableEmployee from './components/GoodsTableEmployee.js'
 import OrderForm from './components/OrderForm.js'
-import CoordinatorPage from './components/CoordinatorPage.js'
+import Menu from './components/Menu.js'
 import RequestsTable from './components/RequestsTable.js'
+import LoginPage from './components/LoginPage.js'
+import NavBar from './components/Bars/NavBar.js';
+import FootBar from './components/Bars/FootBar.js';
+import OpenedRequestTable from './components/OpenedRequestTable.js';
 
 function App() {
+
+  const [user, setUser] = useState();
+  const [jwt, setJwt] = useState()
 
   useEffect(() => {
     document.title = 'Smart App';
   }, [])
 
   return (
+    <>
+    <header>
+      <NavBar setUser={setUser} setJwt={setJwt} user={user}/>
+    </header>
     <Routes>
-      <Route path='/' element={<Home/>}></Route>
-      <Route path='/goods-table-employee' element={<GoodsTableEmployee/>}></Route>
-      <Route path='/coordinator-page/goods-table-coordinator' element={<GoodsTableCoordinator/>}></Route>
+      <Route path='/' element={<Home user={user} setUser={setUser} />}></Route>
+      <Route path='/goods-table-employee' element={<GoodsTableEmployee user={user}/>}></Route>
+      <Route path='goods-table-coordinator' element={<GoodsTableCoordinator/>}></Route>
       <Route path='/coordinator-page/add-good' element={<AddGood/>}></Route>
       <Route path='/order-form' element={<OrderForm/>}></Route>
-      <Route path='/coordinator-page' element={<CoordinatorPage/>}></Route>
-      <Route path='/coordinator-page/requests-table' element={<RequestsTable/>}></Route>
+      <Route path='/menu' element={<Menu user={user}/>}></Route>
+      <Route path='/requests-table' element={<RequestsTable/>}></Route>
+      <Route path='/login-page' element={<LoginPage/>}></Route>
+      <Route path='/opened-request' element={<OpenedRequestTable/>}></Route>
     </Routes>
+    <footer>
+      <FootBar user={user}/>
+    </footer>
+    </>
   ) 
 }
 

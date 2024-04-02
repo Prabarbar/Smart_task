@@ -1,9 +1,11 @@
 import '../App.css';
 import {useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import GoodsListEmployee from './GoodsListEmployee.js'
 
-export default function GoodsTableEmployee(){
+export default function GoodsTableEmployee({user}){
+  const location = useLocation
+
   const [goods, setGoods] = useState([])
   const [counter, setCounter] = useState(0)
   const [filteredGoods, setFilteredGoods] = useState([])
@@ -14,11 +16,79 @@ export default function GoodsTableEmployee(){
 
   const [goodId, setGoodId] = useState('')
 
+  const [info, setInfo] = useState(null)
+  const [request, setRequest] = useState('')
+
+  const [requests, setRequests] = useState([])
+
+  const [isButtonDisabled, setButtonDisabled] = useState(false)
+
   const navigate = useNavigate();
 
   useEffect(()=>{
       showGoods()
+      getRequests()
   },[])
+  useEffect(()=>{
+    getLastRequest()
+  },[requests])
+
+  async function getRequests(){
+    try{
+      const getRes = await fetch('http://localhost:8080/request/get-requests');
+      const data = await getRes.json()
+      setRequests(data)
+    }
+    catch(err){
+      console.error(err)
+    }
+    
+  }
+
+  async function getLastRequest(){
+    if(requests.length ===0){
+      setButtonDisabled(true)
+    }
+    if(requests.length>0){
+      setButtonDisabled(false)
+      try{
+        const getRes = await fetch('http://localhost:8080/request/get-last-request')
+        if(getRes.status=== 200){
+          const request = await getRes.json()
+          setRequest(request)
+        }
+        else{
+          console.error('No requests')
+          setButtonDisabled(true)
+        }
+      }
+      catch{
+        console.error("no requests")
+      }
+    }
+  }
+
+
+  async function createRequest(){
+    try{
+      const postRes = await fetch('http://localhost:8080/request/add-request',{
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({employeeName:user.userName, comment:'', status:'New'})
+      })
+      const request = await postRes.json()
+      setRequest(request)
+      setInfo(`Request ID ${request.requestId} created`)
+      setTimeout(() => {
+        setInfo('')
+      }, "1000");
+    }
+    catch(err){
+      console.error(err)
+    }
+    setButtonDisabled(false)
+  }
+
 
   async function showGoods(){
     try{
@@ -84,9 +154,15 @@ export default function GoodsTableEmployee(){
   }
   }
 
+  
+
   return(    
     <>
-      <button onClick={()=>navigate("/")}>Back</button>
+      <button onClick={()=>navigate("/menu")}>Back</button>
+      <br></br>
+      <button onClick={()=>createRequest()}>Create a request</button><p style={{display:'inline-block'}}><b>------- Click to create a new request</b></p> 
+      <br></br>
+      {info && <h2 style={{color: 'green'}}>{info}</h2>}
       <p>-----------------------------------------------------------</p>
       <label>Filter Item Group:
         <select onChange={e=>setItemGroup(e.target.value)}>
@@ -158,14 +234,14 @@ export default function GoodsTableEmployee(){
             filterFlag ?(
               filteredGoods.map(good =>{
               return <GoodsListEmployee key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity} priceWithoutVat={good.priceWithoutVat}
-              status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
+              status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson} request={request.requestId} user={user} isButtonDisabled={isButtonDisabled}/>
               })
             )
             :
             (
               goods.map(good =>{
                 return <GoodsListEmployee key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity} priceWithoutVat={good.priceWithoutVat}
-                  status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
+                  status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson} request={request.requestId} user={user} isButtonDisabled={isButtonDisabled}/>
                 })
             )
             }

@@ -9,7 +9,6 @@ export default function RequestsTable(){
     const [filterFlag, setFilterFlag]= useState(false)
 
     const [employeeName, setEmployeeName] = useState('')
-    const [unitOfMeasurement, setUnitOfMeasurement] = useState('')
 
     const [requestId, setRequestId] = useState('')
 
@@ -61,7 +60,7 @@ export default function RequestsTable(){
 
   async function handleFilter(){
     try{
-        const getRes = await fetch(`http://localhost:8080/request/get-request-by?employeeName=${employeeName}&unitOfMeasurement=${unitOfMeasurement}`);
+        const getRes = await fetch(`http://localhost:8080/request/get-request-by?employeeName=${employeeName}`);
         const requests = await getRes.json()
         setFilteredRequests(requests)
       }
@@ -69,7 +68,7 @@ export default function RequestsTable(){
       console.error(err)
     }
     setFilterFlag(true)
-    if(employeeName === '' && unitOfMeasurement === ''){
+    if(employeeName === ''){
       setFilterFlag(false)
     }
   }
@@ -87,20 +86,11 @@ export default function RequestsTable(){
   
   return(    
     <>
-      <button onClick={()=>navigate("/coordinator-page")}>Back</button>
-      <button onClick={()=>navigate("/")}>Home</button>
+      <button onClick={()=>navigate("/menu")}>Back</button>
+      <button onClick={()=>navigate("/menu")}>Home</button>
       <p>-----------------------------------------------------------</p>
       <label>Filter Employee Name:
         <input onChange={e=>setEmployeeName(e.target.value)}></input>
-      </label>
-      <br></br>
-      <label>Filter Unit of Measurement:
-        <select onChange={e=>setUnitOfMeasurement(e.target.value)}>
-          <option value=''>No filter</option>
-          <option value='pieces'>pieces</option>
-          <option value='grams'>grams</option>
-          <option value='kilograms'>kilograms</option>
-        </select>
       </label>
       <br></br>
       <button onClick={handleFilter}>Apply filters</button>
@@ -129,20 +119,9 @@ export default function RequestsTable(){
               <th>Emloyee Name
                 <button id='th-button' onClick={()=>handleSort("employeeName")}>&#8595;&#8593;</button>
               </th>
-              <th>Item Id
-                <button id='th-button' onClick={()=>handleSort("itemId")}>&#8595;&#8593;</button>
-              </th>
-              <th>Unit of measurement
-                <button id='th-button' onClick={()=>handleSort("unitOfMeasurement")}>&#8595;&#8593;</button>
-              </th>
-              <th>Quantity
-                <button id='th-button' onClick={()=>handleSort("quantity")}>&#8595;&#8593;</button>
-              </th>
-              <th>Price without VAT
-                <button id='th-button' onClick={()=>handleSort("priceWithoutVat")}>&#8595;&#8593;</button>
-              </th>
               <th>Comment</th>
               <th>Status</th>
+              <th>Open request</th>
               <th>Confirm</th>
               <th>Reject</th>
             </tr>

@@ -7,9 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Integer>{
-    @Query("SELECT u FROM Request u WHERE (:employeeName = '' OR u.employeeName = :employeeName)" +
-            "AND (:unitOfMeasurement = '' OR u.unitOfMeasurement = :unitOfMeasurement)")
-    List<Request> findRequestByEmployeeNameAndUnitOfMeasurement(String employeeName, String unitOfMeasurement);
+    @Query("SELECT u FROM Request u WHERE (:employeeName = '' OR u.employeeName = :employeeName)")
+    List<Request> findRequestByEmployeeName(String employeeName);
 
     /**
      Dear Hiring Manager,

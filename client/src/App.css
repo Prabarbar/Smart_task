@@ -18,6 +18,13 @@
   color: rgb(28, 143, 137);
 }
 
+#requested-goods{
+  width: 100%;
+  border: 1px solid;
+  border-collapse: collapse;
+  color: rgb(28, 143, 137);
+}
+
 th {
   border: 2px solid;
   border-collapse: collapse;
