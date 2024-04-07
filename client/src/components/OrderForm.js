@@ -4,34 +4,31 @@ import { useNavigate } from "react-router-dom"
 
 export default function OrderForm(){
 
-const location = useLocation()
+    const location = useLocation()
 
-const [employeeName, setEmployeeName] = useState('')
-const [requestedQuantity, setRequestedQuantity] = useState(location.state.quantity)
-const [comment, setComment] = useState('')
-const [info, setInfo] = useState(null)
-   
-
-const navigate = useNavigate()
+    const [requestedQuantity, setRequestedQuantity] = useState(location.state.quantity)
+    const [comment, setComment] = useState('')
+    const [info, setInfo] = useState(null)
+    
+    const navigate = useNavigate()
 
 
-
-async function handleSubmit(e){
-    e.preventDefault()
-    try{
-      await fetch(`http://localhost:8080/request/add-good-to-request?requestId=${location.state.request}&goodId=${location.state.itemId}&requestedQuantity=${requestedQuantity}`,{
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-      })
+    async function handleSubmit(e){
+        e.preventDefault()
+        try{
+            await fetch(`http://localhost:8080/request/add-good-to-request?requestId=${location.state.request}&goodId=${location.state.itemId}&requestedQuantity=${requestedQuantity}`,{
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+            })
+        }
+        catch(err){
+            console.error(err)
+        }
+        setInfo("Request updated")
+        setTimeout(() => {
+            navigate("/goods-table-employee")
+        }, "1000");
     }
-    catch(err){
-      console.error(err)
-    }
-    setInfo("Request updated")
-    setTimeout(() => {
-        navigate("/goods-table-employee")
-      }, "1000");
-  }
 
 
     return(
@@ -40,7 +37,7 @@ async function handleSubmit(e){
             <div style={{textAlign:'left'}}>
                 <form onSubmit ={handleSubmit}>
                     <label>Employee Name: 
-                        <input required type='text' readOnly value={location.state.user} onChange={e => setEmployeeName(e.target.value)}></input>
+                        <input required type='text' readOnly value={location.state.user}></input>
                     </label>
                     <br></br>
                     <label>Unit of Measurement: 

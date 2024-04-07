@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useLocation } from "react-router-dom"
 
 export default function Menu({user}){
-    const location = useLocation()
     const navigate = useNavigate()
 
     const [role, setRole] = useState()
@@ -13,18 +11,6 @@ export default function Menu({user}){
         setRole(role)
     },[])
 
-    async function createRequest(){
-        try{
-            await fetch('http://localhost:8080/request/add-request',{
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({employeeName:user.userName, comment:'', status:'New'})
-            })
-        }
-        catch(err){
-            console.error(err)
-        }
-    }
 
     return(
         role === 'coordinator' ?
