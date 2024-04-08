@@ -3,6 +3,7 @@ package org.example.smart_task.controller;
 import org.example.smart_task.good.model.Good;
 import org.example.smart_task.good.payload.AddGoodForm;
 import org.example.smart_task.good.service.GoodServiceImpl;
+import org.example.smart_task.requestedGood.model.RequestedGood;
 import org.example.smart_task.requests.model.Request;
 import org.example.smart_task.requests.payload.AddRequestForm;
 import org.example.smart_task.requests.service.RequestServiceImpl;
@@ -82,6 +83,11 @@ public class Controller {
         requestServiceImpl.deleteRequest(id);
     }
 
+    @DeleteMapping("request/delete-requests")
+    public void deleteRequests(){
+        requestServiceImpl.deleteRequests();
+    }
+
     @PatchMapping("request/update-request")
     public void updateRequest(@RequestParam int id, @RequestBody Request updatedRequest){
         requestServiceImpl.updateRequestById(id, updatedRequest);
@@ -97,9 +103,9 @@ public class Controller {
         return requestServiceImpl.getRequestByEmployeeName(employeeName);
     }
 
-    @PutMapping("/request/add-good-to-request")
-    public void addGoodToRequest(@RequestParam int requestId, @RequestParam int goodId, @RequestParam int requestedQuantity){
-        requestServiceImpl.addGoodToRequest(requestId, goodId, requestedQuantity);
+    @PutMapping("/request/add-requested-good-to-request")
+    public void addRequestedGoodToRequest(@RequestParam int requestId, @RequestParam int goodId, @RequestParam int requestedQuantity){
+        requestServiceImpl.addRequestedGoodToRequest(requestId, goodId, requestedQuantity);
     }
 
     @GetMapping("/request/get-last-request")
@@ -108,7 +114,7 @@ public class Controller {
     }
 
     @GetMapping("/request/get-requested-goods")
-    public List<Good> getRequestedGoods(@RequestParam int requestId){
-        return requestServiceImpl.getRequestById(requestId).getGoods();
+    public List<RequestedGood> getRequestedGoods(@RequestParam int requestId){
+        return requestServiceImpl.getRequestById(requestId).getRequestedGoods();
     }
 }

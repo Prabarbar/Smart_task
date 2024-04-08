@@ -41,8 +41,8 @@ export default function OpenedRequestTable(){
           </thead>
           <tbody>
               {requestedGoods.map(good =>{
-                return <OpenedRequestList key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity} requestedQuantity={good.requestedQuantity} priceWithoutVat={good.priceWithoutVat}
-                  status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
+                return <OpenedRequestList key={good.itemId} itemId={good.itemId} itemGroup={good.itemGroup} unitOfMeasurement={good.unitOfMeasurement} quantity = {good.quantity}
+                 requestedQuantity={good.requestedQuantity} priceWithoutVat={good.priceWithoutVat} status={good.status} storageLocation={good.storageLocation} contactPerson={good.contactPerson}/>
                 })}
           </tbody>
         </table>

@@ -35,10 +35,13 @@ export default function RequestList({requestId, employeeName, itemId, unitOfMeas
     for(let i=0; i<requestedGoods.length; i++){
       // In the try{} below i substract the quantity of the item, if request is approved.
       let newQuantity = ''
+      let requestedGoodId = requestedGoods[i].itemId
+      let indexOfDot = requestedGoodId.indexOf('.')
+      requestedGoodId = requestedGoodId.substring(0,indexOfDot)
       try{
-          const getRes = await fetch(`http://localhost:8080/good/get-good?id=${requestedGoods[i].itemId}`)
+          const getRes = await fetch(`http://localhost:8080/good/get-good?id=${requestedGoodId}`)
           const good = await getRes.json()
-          let newQuantityNum = parseInt(good.quantity) - parseInt(good.requestedQuantity)
+          let newQuantityNum = parseInt(good.quantity) - parseInt(requestedGoods[i].requestedQuantity)
           if(newQuantityNum < 0){
               newQuantityNum = 0
           }
@@ -48,7 +51,7 @@ export default function RequestList({requestId, employeeName, itemId, unitOfMeas
           console.error(err)
       }
       try{
-          await fetch(`http://localhost:8080/good/update-good?id=${requestedGoods[i].itemId}`, {
+          await fetch(`http://localhost:8080/good/update-good?id=${requestedGoodId}`, {
               method: 'PATCH',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({quantity: newQuantity})
@@ -59,7 +62,7 @@ export default function RequestList({requestId, employeeName, itemId, unitOfMeas
       }
       if(newQuantity === '0'){
         try{
-          await fetch(`http://localhost:8080/good/delete-good?id=${requestedGoods[i].itemId}`, {
+          await fetch(`http://localhost:8080/good/delete-good?id=${requestedGoodId}`, {
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'}
             })

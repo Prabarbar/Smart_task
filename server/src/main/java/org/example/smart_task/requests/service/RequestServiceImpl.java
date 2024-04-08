@@ -2,14 +2,14 @@ package org.example.smart_task.requests.service;
 
 import org.example.smart_task.good.model.Good;
 import org.example.smart_task.good.repository.GoodRepository;
+import org.example.smart_task.requestedGood.model.RequestedGood;
+import org.example.smart_task.requestedGood.repository.RequestedGoodRepository;
 import org.example.smart_task.requests.model.Request;
 import org.example.smart_task.requests.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,12 @@ import java.util.Optional;
 public class RequestServiceImpl implements RequestService{
     private final RequestRepository requestRepository;
     private final GoodRepository goodRepository;
+    private final RequestedGoodRepository requestedGoodRepository;
     @Autowired
-    public RequestServiceImpl(RequestRepository requestRepository, GoodRepository goodRepository){
+    public RequestServiceImpl(RequestRepository requestRepository, GoodRepository goodRepository, RequestedGoodRepository requestedGoodRepository){
         this.requestRepository = requestRepository;
         this.goodRepository = goodRepository;
+        this.requestedGoodRepository = requestedGoodRepository;
     }
     @Override
     public void addRequest(Request request) {
@@ -61,17 +63,30 @@ public class RequestServiceImpl implements RequestService{
         return requestRepository.findRequestByEmployeeName(employeeName);
     }
 
+
+
     @Override
-    public void addGoodToRequest(int requestId, int goodId, int requestedQuantity) {
+    public void addRequestedGoodToRequest(int requestId, int goodId, int requestedQuantity) {
         Optional<Request> optionalRequest = requestRepository.findById(requestId);
         Optional<Good> optionalGood  = goodRepository.findById(goodId);
         if (optionalRequest.isPresent() && optionalGood.isPresent()){
             Request request = optionalRequest.get();
             Good good = optionalGood.get();
-            good.setRequestedQuantity(requestedQuantity);
-            List<Good> goods = request.getGoods();
-            goods.add(good);
-            request.setGoods(goods);
+            RequestedGood requestedGood = new RequestedGood(
+                    good.getItemId()+"."+requestId,
+                    good.getItemGroup(),
+                    good.getUnitOfMeasurement(),
+                    requestedQuantity,
+                    good.getPriceWithoutVat(),
+                    good.getStatus(),
+                    good.getStorageLocation(),
+                    good.getContactPerson()
+            );
+            requestedGoodRepository.save(requestedGood);
+
+            List<RequestedGood> requestedGoods = request.getRequestedGoods();
+            requestedGoods.add(requestedGood);
+            request.setRequestedGoods(requestedGoods);
             requestRepository.save(request);
         }
     }
@@ -83,5 +98,10 @@ public class RequestServiceImpl implements RequestService{
             return new ResponseEntity<Request>(HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(requests.getLast());
+    }
+
+    @Override
+    public void deleteRequests() {
+        requestRepository.deleteAll();
     }
 }

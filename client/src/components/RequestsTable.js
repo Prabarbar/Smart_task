@@ -83,6 +83,19 @@ export default function RequestsTable(){
       console.error(err)
     }
   }
+
+  async function handleDeleteRequests(){
+    try{
+      await fetch('http://localhost:8080/request/delete-requests',{
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'}
+  })
+    }
+    catch(err){
+      console.error(err)
+    }
+    showRequests()
+}
   
   return(    
     <>
@@ -108,6 +121,8 @@ export default function RequestsTable(){
         <br></br>
         <button onClick={()=>showRequests()}>Clear</button>
       </label>
+      <br></br>
+      <button onClick={()=>handleDeleteRequests()}>Delete Requests</button>
       <div>
         <h2 style={{textAlign:'center'}}>Requests Table</h2>
         <table id='requests-table' className='requests'>

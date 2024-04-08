@@ -16,7 +16,7 @@ export default function OrderForm(){
     async function handleSubmit(e){
         e.preventDefault()
         try{
-            await fetch(`http://localhost:8080/request/add-good-to-request?requestId=${location.state.request}&goodId=${location.state.itemId}&requestedQuantity=${requestedQuantity}`,{
+            await fetch(`http://localhost:8080/request/add-requested-good-to-request?requestId=${location.state.request}&goodId=${location.state.itemId}&requestedQuantity=${requestedQuantity}`,{
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
             })

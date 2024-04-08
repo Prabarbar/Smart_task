@@ -15,6 +15,7 @@ public interface RequestService {
     void deleteRequest(int id);
     void updateRequestById(int id, Request updatedRequest);
     List<Request> getRequestByEmployeeName(String employeeName);
-    void addGoodToRequest(int requestId, int goodId, int requestedQuantity);
+    void addRequestedGoodToRequest(int requestId, int goodId, int requestedQuantity);
     ResponseEntity<?> getLastRequest();
+    void deleteRequests();
 }

@@ -1,31 +1,30 @@
-package org.example.smart_task.good.model;
+package org.example.smart_task.requestedGood.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "goods")
-public class Good {
+@Table(name = "requestedGoods")
+public class RequestedGood {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int itemId;
+    private String itemId;
     private String itemGroup;
     private String unitOfMeasurement;
-    private int quantity;
+    private int requestedQuantity;
     private int priceWithoutVat;
     private String status;
     private String storageLocation;
     private String contactPerson;
 
-    public Good(String itemGroup, String unitOfMeasurement, int quantity, int priceWithoutVat,
-                String status, String storageLocation, String contactPerson, int requestedQuantity) {
+    public RequestedGood(String itemId, String itemGroup, String unitOfMeasurement, int requestedQuantity, int priceWithoutVat,
+                String status, String storageLocation, String contactPerson) {
+        this.itemId = itemId;
         this.itemGroup = itemGroup;
         this.unitOfMeasurement = unitOfMeasurement;
-        this.quantity = quantity;
+        this.requestedQuantity = requestedQuantity;
         this.priceWithoutVat = priceWithoutVat;
         this.status = status;
         this.storageLocation = storageLocation;
